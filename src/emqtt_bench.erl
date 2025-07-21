@@ -716,8 +716,10 @@ publish(Client, Opts) ->
     ok = ensure_publish_begin_time(),
     Flags   = [{qos, proplists:get_value(qos, Opts)},
                {retain, proplists:get_value(retain, Opts)}],
-    Payload = proplists:get_value(payload, Opts),
-    case emqtt:publish(Client, topic_opt(Opts), Payload, Flags) of
+    % Payload = proplists:get_value(payload, Opts),
+
+    Payload1 = <<"{\"id\":\"51140\",\"version\":\"1.0\",\"params\":{\"Speed\":0.00,\"GeoLocation\":{\"Longitude\":113.477878,\"Latitude\":22.627232,\"Altitude\":8.400000,\"Angle\":176,\"CoordinateSystem\":1,\"GPSRxLev\":0},\"ActualPower\":1500,\"GPSRxLev\":0,\"MotorRPM\":0,\"BMSVoltage\":64.40,\"BMSBattTotI\":0.00},\"sys\":{\"ack\":0}}">>,
+    case emqtt:publish(Client, topic_opt(Opts), Payload1, Flags) of
         ok -> ok;
         {ok, _} -> ok;
         {error, Reason} -> {error, Reason}
@@ -921,6 +923,8 @@ loop_opts(Opts) ->
                                          , seq
                                          , publish_signal_mref
                                          , pub_start_wait
+                                         , client_id
+                                         , username
                                          ])
                  end, Opts).
 
