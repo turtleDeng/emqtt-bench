@@ -531,6 +531,7 @@ connect(Parent, N, PubSub, Opts) ->
            end,
     ClientId = client_id(PubSub, N, Opts),
     MqttOpts = [{clientid, ClientId},
+                {username, ClientId},
                 {tcp_opts, tcp_opts(Opts)},
                 {ssl_opts, ssl_opts(Opts)}]
         ++ session_property_opts(Opts)
@@ -755,8 +756,8 @@ mqtt_opts([{version, 4}|Opts], Acc) ->
     mqtt_opts(Opts, [{proto_ver, v4}|Acc]);
 mqtt_opts([{version, 5}|Opts], Acc) ->
     mqtt_opts(Opts, [{proto_ver, v5}|Acc]);
-mqtt_opts([{username, Username}|Opts], Acc) ->
-    mqtt_opts(Opts, [{username, list_to_binary(Username)}|Acc]);
+% mqtt_opts([{username, Username}|Opts], Acc) ->
+%     mqtt_opts(Opts, [{username, list_to_binary(Username)}|Acc]);
 mqtt_opts([{password, Password}|Opts], Acc) ->
     mqtt_opts(Opts, [{password, list_to_binary(Password)}|Acc]);
 mqtt_opts([{keepalive, I}|Opts], Acc) ->
