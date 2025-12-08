@@ -531,7 +531,7 @@ connect(Parent, N, PubSub, Opts) ->
            end,
     ClientId = client_id(PubSub, N, Opts),
     MqttOpts = [{clientid, ClientId},
-                {username, ClientId},
+                {username, username(N, Opts)},
                 {tcp_opts, tcp_opts(Opts)},
                 {ssl_opts, ssl_opts(Opts)}]
         ++ session_property_opts(Opts)
@@ -848,6 +848,9 @@ client_id(PubSub, N, Opts) ->
         {true, Pref} ->
             list_to_binary(lists:concat([Pref, "_", N]))
     end.
+username(N, Opts) ->
+    Pref = proplists:get_value(prefix, Opts),
+    list_to_binary(lists:concat([Pref, "_", N])).
 
 topics_opt(Opts) ->
     Topics = topics_opt(Opts, []),
