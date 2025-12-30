@@ -851,8 +851,8 @@ client_id(PubSub, N, Opts) ->
     end.
 username(N, Opts) ->
     OldStr = proplists:get_value(prefix, Opts),
-    NewStr = string:replace(OldStr, ".", "&", all),
-    list_to_binary(lists:concat([NewStr, "_",N])).
+    [P, Name] = string:tokens(OldStr, "."),
+    list_to_binary(lists:concat([Name,"_",N, "&", P])).
 
 topics_opt(Opts) ->
     Topics = topics_opt(Opts, []),
