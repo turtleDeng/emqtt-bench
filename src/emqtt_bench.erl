@@ -543,6 +543,7 @@ connect(Parent, N, PubSub, Opts) ->
     RandomPubWaitMS = random_pub_wait_period(Opts),
     AllOpts  = [ {seq, N}
                , {client_id, ClientId}
+               , {username, username(N, Opts)}
                , {publish_signal_mref, MRef}
                , {pub_start_wait, RandomPubWaitMS}
                | Opts],
@@ -849,8 +850,9 @@ client_id(PubSub, N, Opts) ->
             list_to_binary(lists:concat([Pref, "_", N]))
     end.
 username(N, Opts) ->
-    Pref = proplists:get_value(prefix, Opts),
-    list_to_binary(lists:concat([Pref, "_", N])).
+    OldStr = proplists:get_value(prefix, Opts),
+    NewStr = string:replace(OldStr, ".", "&", all),
+    list_to_binary(lists:concat([NewStr, N])).
 
 topics_opt(Opts) ->
     Topics = topics_opt(Opts, []),
